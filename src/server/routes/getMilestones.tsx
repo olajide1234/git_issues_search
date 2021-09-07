@@ -9,7 +9,7 @@ async function getMilestones({
   owner: string;
   repo: string;
 }): Promise<Array<Milestone>> {
-  const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/milestones`;
+  const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/milestones?per_page=100`;
   // const response = await fetch(fetchUrl, {
   //   method: "GET",
   //   mode: "cors",

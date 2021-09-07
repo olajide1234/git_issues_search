@@ -9,7 +9,7 @@ async function getLabels({
   owner: string;
   repo: string;
 }): Promise<Array<Label>> {
-  const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/labels`;
+  const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/labels?per_page=100`;
   // const response = await fetch(fetchUrl, {
   //   method: "GET",
   //   mode: "cors",
