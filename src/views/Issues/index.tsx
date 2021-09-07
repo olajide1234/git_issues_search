@@ -28,6 +28,7 @@ const Issues: FC = () => {
   });
   const [issues, setIssues] = useState<Array<Issue>>([]);
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
   const didMount = useRef(false);
 
   // alternatively, we can use useReducer and useContext to avoid function plumbing
@@ -39,6 +40,7 @@ const Issues: FC = () => {
 
   useEffect(() => {
     async function fetchIssues(): Promise<void> {
+      setLoading(true);
       try {
         console.log("fetching");
         const response = await dataHandler.execute(
@@ -46,13 +48,14 @@ const Issues: FC = () => {
         );
         if (Array.isArray(response)) {
           setIssues(response);
+          setLoading(false);
           error && setError(false);
         } else {
           throw new Error("Response is not an array");
         }
       } catch (error) {
         console.log("Error fetching issues");
-        // setLoading(false);
+        setLoading(false);
         setError(true);
       }
     };
@@ -84,12 +87,13 @@ const Issues: FC = () => {
         {isRepoInfoSet ? (
           <ResultsTable
             currentPage={globalFilters.page}
+            error={error}
             issues={issues}
+            loading={loading}
             repoDetails={{
               owner: globalFilters.owner,
               repo: globalFilters.repo,
             }}
-            error={error}
             onSubmit={handleSearchSubmit}
           />
         ) : null}

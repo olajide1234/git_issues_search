@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { Box, Pagination } from "@primer/components";
+import { Box, Pagination, Spinner } from "@primer/components";
 
 import type { FC } from "react";
 import type { DropdownfilterGroup, Issue, GlobalFilters } from "../../types";
@@ -19,6 +19,7 @@ interface ResultsTableProp {
   currentPage: number;
   error: boolean;
   issues: Array<Issue>;
+  loading: boolean;
   onSubmit: (inputs: Partial<GlobalFilters>) => void;
   repoDetails: { owner: string; repo: string };
 }
@@ -26,6 +27,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
   currentPage,
   error,
   issues,
+  loading,
   onSubmit,
   repoDetails,
 }) => {
@@ -42,11 +44,11 @@ const ResultsTable: FC<ResultsTableProp> = ({
     e.preventDefault();
     handleItemClick({ page: number });
   };
-  const isResultEmptyOrError = issues.length < 1 || error;
+  const isResultEmptyOrErrorOrLoading = loading || issues.length < 1 || error;
 
   useEffect(() => {
     async function fetchFilters(): Promise<void> {
-      console.log('ffe insude')
+      console.log("ffe insude");
       try {
         // TODO: We can load this data non-sequentially or let each component load its data so they dont block UI
         const milestonesData = await dataHandler.execute(
@@ -62,7 +64,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
         assigneesData && setAssignees(assigneesData);
         labelsData && setLabels(labelsData);
       } catch (error) {
-        console.log('Unable to fetch filters')
+        console.log("Unable to fetch filters");
       }
     }
     fetchFilters();
@@ -79,82 +81,94 @@ const ResultsTable: FC<ResultsTableProp> = ({
         borderStyle="solid"
       >
         <table className="tableBody">
-          <tr>
-            <div className="tableRow">
-              <div>
-                <th>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={milestones}
-                    name="Milestones"
-                  />
-                </th>
-                <th>
+          <tbody>
+            <tr>
+              <div className="tableRow">
+                <div>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={milestones}
+                      name="Milestones"
+                    />
+                  </th>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={[
+                        { id: "open", primaryText: "Open", name: "state" },
+                        { id: "closed", primaryText: "Closed", name: "state" },
+                        { id: "all", primaryText: "All", name: "state" },
+                      ]}
+                      name="State"
+                    />
+                  </th>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={assignees}
+                      name="Assignee"
+                    />
+                  </th>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={assignees}
+                      name="Creator"
+                    />
+                  </th>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={assignees}
+                      name="Mentioned"
+                    />
+                  </th>
+                  <th>
+                    <DropdownHeader
+                      clickHandler={handleItemClick}
+                      content={labels}
+                      name="Labels"
+                    />
+                  </th>
+                </div>
+                <div>
                   <DropdownHeader
                     clickHandler={handleItemClick}
                     content={[
-                      { id: "open", primaryText: "Open", name: "state" },
-                      { id: "closed", primaryText: "Closed", name: "state" },
-                      { id: "all", primaryText: "All", name: "state" },
+                      { id: "created", primaryText: "Created", name: "sort" },
+                      { id: "updated", primaryText: "Updated", name: "sort" },
+                      { id: "comments", primaryText: "Comments", name: "sort" },
                     ]}
-                    name="State"
+                    name="Sort"
+                    align="right"
+                    width="150px"
                   />
-                </th>
-                <th>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={assignees}
-                    name="Assignee"
-                  />
-                </th>
-                <th>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={assignees}
-                    name="Creator"
-                  />
-                </th>
-                <th>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={assignees}
-                    name="Mentioned"
-                  />
-                </th>
-                <th>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={labels}
-                    name="Labels"
-                  />
-                </th>
+                </div>
               </div>
-              <div>
-                <DropdownHeader
-                  clickHandler={handleItemClick}
-                  content={[
-                    { id: "created", primaryText: "Created", name: "sort" },
-                    { id: "updated", primaryText: "Updated", name: "sort" },
-                    { id: "comments", primaryText: "Comments", name: "sort" },
-                  ]}
-                  name="Sort"
-                  align="right"
-                  width="150px"
-                />
-              </div>
-            </div>
-          </tr>
-          {isResultEmptyOrError ? (
-            <tr>
-              <p className="notifText">
-                {error
-                  ? "Ooops! An error occured. Please try later"
-                  : "There are no results matching your filters"}
-              </p>
             </tr>
-          ) : (
-            <TableRow issues={issues} />
-          )}
+            {isResultEmptyOrErrorOrLoading ? (
+              loading ? (
+                <tr>
+                  <td>
+                    <p className="notifText">
+                      <Spinner size="medium" />
+                    </p>
+                  </td>
+                </tr>
+              ) : (
+                <tr>
+                  <p className="notifText">
+                    {error
+                      ? "Ooops! An error occured. Please try later"
+                      : "There are no results matching your filters"}
+                  </p>
+                </tr>
+              )
+            ) : (
+              <TableRow issues={issues} />
+            )}
+          </tbody>
         </table>
       </Box>
       <Pagination
