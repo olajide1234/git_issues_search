@@ -7,8 +7,12 @@ $border-color: #ddd;
 }
 
 .headerItem {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.hideable {
+  display: none;
 }
 
 .tableBody {
@@ -19,6 +23,25 @@ $border-color: #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
+  font-weight: 500;
   height: 2rem;
+}
+
+@media (min-width: 600px) {
+  .tableHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    height: 2rem;
+  }
+
+  .headerItem {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .hideable {
+    display: inherit;
+  }
 }

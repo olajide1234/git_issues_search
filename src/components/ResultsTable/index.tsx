@@ -91,7 +91,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
               <td>
                 <div className="tableHeader">
                   <div className="tableHeader">
-                    <span className="headerItem">
+                    <span className="headerItem hideable">
                       <DropdownHeader
                         clickHandler={handleItemClick}
                         content={milestones}
@@ -120,14 +120,14 @@ const ResultsTable: FC<ResultsTableProp> = ({
                         name="Assignee"
                       />
                     </span>
-                    <span className="headerItem">
+                    <span className="headerItem hideable">
                       <DropdownHeader
                         clickHandler={handleItemClick}
                         content={assignees}
                         name="Creator"
                       />
                     </span>
-                    <span className="headerItem">
+                    <span className="headerItem hideable">
                       <DropdownHeader
                         clickHandler={handleItemClick}
                         content={assignees}

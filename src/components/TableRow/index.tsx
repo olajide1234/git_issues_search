@@ -27,10 +27,10 @@ const TableRow: FC<TableRowProps> = ({ issues }) => {
                   </span>
                 </span>
               </span>
-              <span>
-                <span className="rowData">#{issue.number}</span> |
-                <span className="rowData">Status: {issue.state}</span> |
-                <span className="rowData">Opened by: {issue.user.login}</span> |
+              <span className="rowDetails">
+                <span className="rowData">#{issue.number}</span> 
+                <span className="rowData">Status: {issue.state}</span> 
+                <span className="rowData">Opened by: {issue.user.login}</span> 
                 <span className="rowData">
                   Opened on: &nbsp;
                   {new Date(issue.created_at).toLocaleDateString(undefined, {

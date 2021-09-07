@@ -11,7 +11,19 @@ $border-color: #ddd;
   margin-right: 1rem;
 }
 
+.rowDetails {
+  display: flex;
+  flex-direction: column;
+}
+
 .rowTitle {
   display: block;
   padding: 1rem;
+}
+
+@media (min-width: 600px) {
+.rowDetails {
+  display: flex;
+  flex-direction: row;
+}
 }

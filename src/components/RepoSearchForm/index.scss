@@ -1,10 +1,17 @@
 .formContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
+  display: block;
 }
 
 .submitButton {
   height: fit-content;
   margin-top: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .formContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }

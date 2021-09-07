@@ -33,7 +33,7 @@ const DropdownHeader: FC<DropdownHeaderProps> = ({
         {name}
         <span className="dropdownIcon"></span>
       </Text>
-      <SelectMenu.Modal
+      <SelectMenu.Modal className="dropdownModal"
         align={align ? align : undefined}
         width={width ? width : "300px"}
       >

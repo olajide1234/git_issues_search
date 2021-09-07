@@ -70,7 +70,7 @@ const Issues: FC = () => {
     <Fragment>
       <PageHeader />
 
-      <Box display="grid" gridGap={3}>
+      <Box className="contentBox" display="grid" gridGap={3}>
         <Box
           m={3}
           p={3}
