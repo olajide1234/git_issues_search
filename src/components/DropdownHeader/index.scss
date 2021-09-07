@@ -14,3 +14,9 @@
 .title {
   cursor: pointer;
 }
+
+@media (max-width: 543px) {
+  .dropdownIcon {
+    display: none;
+  }
+}

@@ -17,8 +17,8 @@ const TableRow: FC<TableRowProps> = ({ issues }) => {
     <Fragment>
       {issues.map((issue) => (
         <tr key={issue.id}>
-          <div className="rowContent">
-            <td>
+          <td>
+            <div className="rowContent">
               <span>
                 <span className="rowTitle">
                   <Link href={issue.html_url}>{issue.title}</Link>
@@ -41,8 +41,8 @@ const TableRow: FC<TableRowProps> = ({ issues }) => {
                   })}
                 </span>
               </span>
-            </td>
-          </div>
+            </div>
+          </td>
         </tr>
       ))}
     </Fragment>

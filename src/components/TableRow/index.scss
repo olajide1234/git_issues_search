@@ -1,8 +1,10 @@
+$border-color: #ddd;
+
 .rowContent {
   display: grid;
-  padding-top: 2rem;
+  margin-top: 1rem;
+  border-top: 1px solid $border-color;
 }
-
 
 .rowData {
   margin-left: 1rem;

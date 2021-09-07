@@ -81,72 +81,94 @@ const ResultsTable: FC<ResultsTableProp> = ({
         borderStyle="solid"
       >
         <table className="tableBody">
-          <tbody>
+          <thead>
             <tr>
-              <div className="tableRow">
-                <div>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={milestones}
-                      name="Milestones"
-                    />
-                  </th>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={[
-                        { id: "open", primaryText: "Open", name: "state" },
-                        { id: "closed", primaryText: "Closed", name: "state" },
-                        { id: "all", primaryText: "All", name: "state" },
-                      ]}
-                      name="State"
-                    />
-                  </th>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={assignees}
-                      name="Assignee"
-                    />
-                  </th>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={assignees}
-                      name="Creator"
-                    />
-                  </th>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={assignees}
-                      name="Mentioned"
-                    />
-                  </th>
-                  <th>
-                    <DropdownHeader
-                      clickHandler={handleItemClick}
-                      content={labels}
-                      name="Labels"
-                    />
-                  </th>
+              <td>
+                <div className="tableHeader">
+                  <div className="tableHeader">
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={milestones}
+                        name="Milestones"
+                      />
+                    </span>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={[
+                          { id: "open", primaryText: "Open", name: "state" },
+                          {
+                            id: "closed",
+                            primaryText: "Closed",
+                            name: "state",
+                          },
+                          { id: "all", primaryText: "All", name: "state" },
+                        ]}
+                        name="State"
+                      />
+                    </span>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={assignees}
+                        name="Assignee"
+                      />
+                    </span>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={assignees}
+                        name="Creator"
+                      />
+                    </span>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={assignees}
+                        name="Mentioned"
+                      />
+                    </span>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={labels}
+                        name="Labels"
+                      />
+                    </span>
+                  </div>
+                  <div>
+                    <span className="headerItem">
+                      <DropdownHeader
+                        clickHandler={handleItemClick}
+                        content={[
+                          {
+                            id: "created",
+                            primaryText: "Created",
+                            name: "sort",
+                          },
+                          {
+                            id: "updated",
+                            primaryText: "Updated",
+                            name: "sort",
+                          },
+                          {
+                            id: "comments",
+                            primaryText: "Comments",
+                            name: "sort",
+                          },
+                        ]}
+                        name="Sort"
+                        align="right"
+                        width="150px"
+                      />
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <DropdownHeader
-                    clickHandler={handleItemClick}
-                    content={[
-                      { id: "created", primaryText: "Created", name: "sort" },
-                      { id: "updated", primaryText: "Updated", name: "sort" },
-                      { id: "comments", primaryText: "Comments", name: "sort" },
-                    ]}
-                    name="Sort"
-                    align="right"
-                    width="150px"
-                  />
-                </div>
-              </div>
+              </td>
             </tr>
+          </thead>
+          <tbody>
             {isResultEmptyOrErrorOrLoading ? (
               loading ? (
                 <tr>
@@ -171,12 +193,14 @@ const ResultsTable: FC<ResultsTableProp> = ({
           </tbody>
         </table>
       </Box>
-      {isResultEmptyOrErrorOrLoading ? null : <Pagination
-        pageCount={300}
-        currentPage={currentPage}
-        onPageChange={HandlePageChange}
-        showPages={false}
-      />}
+      {isResultEmptyOrErrorOrLoading ? null : (
+        <Pagination
+          pageCount={300}
+          currentPage={currentPage}
+          onPageChange={HandlePageChange}
+          showPages={false}
+        />
+      )}
     </Fragment>
   );
 };

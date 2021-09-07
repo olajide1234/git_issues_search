@@ -1,15 +1,12 @@
 $border-color: #ddd;
 
 .notifText {
+  border-top: 1px solid $border-color;
   text-align: center;
   padding: 4rem;
 }
 
-td {
-  border-top: 1px solid $border-color;
-}
-
-th {
+.headerItem {
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -18,8 +15,10 @@ th {
   width: 100%;
 }
 
-.tableRow {
+.tableHeader {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  height: 2rem;
 }
-
