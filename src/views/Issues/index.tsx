@@ -85,14 +85,11 @@ const Issues: FC = () => {
         </Box>
         {isRepoInfoSet ? (
           <ResultsTable
+            activeFilter={globalFilters}
             currentPage={globalFilters.page}
             error={error}
             issues={issues}
             loading={loading}
-            repoDetails={{
-              owner: globalFilters.owner,
-              repo: globalFilters.repo,
-            }}
             onSubmit={handleSearchSubmit}
           />
         ) : null}

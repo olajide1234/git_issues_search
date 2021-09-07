@@ -1,10 +1,12 @@
 
-TO-DO:
-1 - Use mock service worker in testing so we can test data fetching more realistically
+#### TO-DO:
+1 - Use mock service worker in testing so we can test data fetching including server
 2 - Enable multiple selections of filter. Currently, filter selection overrides previous selection of same filter
+3 - Need some visual cue as to which filter categories are currently active
+4 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
 
 
-The Challenge
+##### The Challenge
 The customer support team has to interact with the Github issues search throughout the day. They're put off by typing queries and would much rather have an interactive query builder that hides the actual query from them.
 
 Can you come up with a design that allows our customer support team to search GitHub issues in a more point-and-click, user-friendly way that doesn't involve typing complex queries?

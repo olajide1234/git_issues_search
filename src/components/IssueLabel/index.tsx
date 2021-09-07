@@ -22,7 +22,7 @@ const IssueLabel: FC<IssueLabelProps> = ({ labels }) => {
         <Label
           key={label.id}
           variant="medium"
-          sx={{ bg: label.color, color: "#24292E", m: 1 }}
+          sx={{ bg: label.color, color: "#fffff", m: 1 }}
         >
           {label.name}
         </Label>

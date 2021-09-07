@@ -16,20 +16,20 @@ import {
 import "./index.scss";
 
 interface ResultsTableProp {
+  activeFilter: GlobalFilters;
   currentPage: number;
   error: boolean;
   issues: Array<Issue>;
   loading: boolean;
   onSubmit: (inputs: Partial<GlobalFilters>) => void;
-  repoDetails: { owner: string; repo: string };
 }
 const ResultsTable: FC<ResultsTableProp> = ({
+  activeFilter,
   currentPage,
   error,
   issues,
   loading,
   onSubmit,
-  repoDetails,
 }) => {
   const [milestones, setMilestones] = useState<DropdownfilterGroup>([]);
   const [assignees, setAssignees] = useState<DropdownfilterGroup>([]);
@@ -52,18 +52,18 @@ const ResultsTable: FC<ResultsTableProp> = ({
         // TODO: We can load this data non-sequentially or let each component load its data so they dont block UI
         const milestonesData = await filterDataHandler(
           getMilestonesCommand({
-            owner: repoDetails.owner,
-            repo: repoDetails.repo,
+            owner: activeFilter.owner,
+            repo: activeFilter.repo,
           })
         );
         const assigneesData = await filterDataHandler(
           getAssigneesCommand({
-            owner: repoDetails.owner,
-            repo: repoDetails.repo,
+            owner: activeFilter.owner,
+            repo: activeFilter.repo,
           })
         );
         const labelsData = await filterDataHandler(
-          getLabelsCommand({ owner: repoDetails.owner, repo: repoDetails.repo })
+          getLabelsCommand({ owner: activeFilter.owner, repo: activeFilter.repo })
         );
         milestonesData && setMilestones(milestonesData);
         assigneesData && setAssignees(assigneesData);
@@ -73,7 +73,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
       }
     }
     fetchFilters();
-  }, [repoDetails.owner, repoDetails.repo]);
+  }, [activeFilter.owner, activeFilter.repo]);
 
   // TODO: implement search functionality for all dropdowns
   return (
@@ -93,6 +93,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                   <div className="tableHeader">
                     <span className="headerItem hideable">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={milestones}
                         name="Milestones"
@@ -100,6 +101,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                     </span>
                     <span className="headerItem">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={[
                           { id: "open", primaryText: "Open", name: "state" },
@@ -115,6 +117,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                     </span>
                     <span className="headerItem">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={assignees}
                         name="Assignee"
@@ -122,6 +125,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                     </span>
                     <span className="headerItem hideable">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={assignees}
                         name="Creator"
@@ -129,6 +133,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                     </span>
                     <span className="headerItem hideable">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={assignees}
                         name="Mentioned"
@@ -136,6 +141,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                     </span>
                     <span className="headerItem">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={labels}
                         name="Labels"
@@ -145,6 +151,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                   <div>
                     <span className="headerItem">
                       <DropdownHeader
+                        activeFilter={activeFilter}
                         clickHandler={handleItemClick}
                         content={[
                           {

@@ -7,6 +7,7 @@ import type { DropdownfilterGroup, GlobalFilters } from "../../types";
 import "./index.scss";
 
 interface DropdownHeaderProps {
+  activeFilter: GlobalFilters;
   clickHandler: (param: Partial<GlobalFilters>) => void;
   content: DropdownfilterGroup;
   name: string;
@@ -14,6 +15,7 @@ interface DropdownHeaderProps {
   width?: string | number;
 }
 const DropdownHeader: FC<DropdownHeaderProps> = ({
+  activeFilter,
   clickHandler,
   content,
   name,
@@ -33,7 +35,8 @@ const DropdownHeader: FC<DropdownHeaderProps> = ({
         {name}
         <span className="dropdownIcon"></span>
       </Text>
-      <SelectMenu.Modal className="dropdownModal"
+      <SelectMenu.Modal
+        className="dropdownModal"
         align={align ? align : undefined}
         width={width ? width : "300px"}
       >
@@ -42,6 +45,7 @@ const DropdownHeader: FC<DropdownHeaderProps> = ({
           {updatedContent.map((item, i) => (
             <SelectMenu.Item
               key={i}
+              selected={activeFilter[item.name] === item.id}
               onClick={() => handleItemClick({ [item.name]: item.id })}
             >
               {item.primaryText} {item?.secondaryText}
