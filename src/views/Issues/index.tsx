@@ -4,7 +4,7 @@ import { Box, Pagehead } from "@primer/components";
 import type { FC } from "react";
 import type { GlobalFilters, Issue } from "../../types";
 
-import { dataHandler, getIssuesCommand } from "../../lib/dataHandler";
+import { issueDataHandler, getIssuesCommand } from "../../lib/dataHandler";
 import PageHeader from "../../components/PageHeader";
 import RepoSearchForm from "../../components/RepoSearchForm";
 import ResultsTable from "../../components/ResultsTable";
@@ -43,7 +43,7 @@ const Issues: FC = () => {
       setLoading(true);
       try {
         console.log("fetching");
-        const response = await dataHandler.execute(
+        const response = await issueDataHandler(
           getIssuesCommand(globalFilters)
         );
         if (Array.isArray(response)) {

@@ -9,6 +9,7 @@ async function getAssignees({
   repo: string;
 }): Promise<Array<User>> {
   const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/assignees?per_page=100`;
+  console.log('hitting server')
   // const response = await fetch(fetchUrl, {
   //   method: "GET", 
   //   mode: "cors", 

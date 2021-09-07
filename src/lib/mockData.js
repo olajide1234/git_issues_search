@@ -1,16 +1,93 @@
-import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import ResultsTable from "./index";
-import { filterDataHandler } from "../../lib/dataHandler";
+export const mockMilestone = [
+  {
+    url: "https://api.github.com/repos/octocat/Hello-World/milestones/1",
+    html_url: "https://github.com/octocat/Hello-World/milestones/v1.0",
+    labels_url:
+      "https://api.github.com/repos/octocat/Hello-World/milestones/1/labels",
+    id: 1002604,
+    node_id: "MDk6TWlsZXN0b25lMTAwMjYwNA==",
+    number: 1,
+    state: "open",
+    title: "v1.0",
+    description: "Tracking milestone for version 1.0",
+    creator: {
+      login: "octocat",
+      id: 1,
+      node_id: "MDQ6VXNlcjE=",
+      avatar_url: "https://github.com/images/error/octocat_happy.gif",
+      gravatar_id: "",
+      url: "https://api.github.com/users/octocat",
+      html_url: "https://github.com/octocat",
+      followers_url: "https://api.github.com/users/octocat/followers",
+      following_url:
+        "https://api.github.com/users/octocat/following{/other_user}",
+      gists_url: "https://api.github.com/users/octocat/gists{/gist_id}",
+      starred_url:
+        "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+      subscriptions_url: "https://api.github.com/users/octocat/subscriptions",
+      organizations_url: "https://api.github.com/users/octocat/orgs",
+      repos_url: "https://api.github.com/users/octocat/repos",
+      events_url: "https://api.github.com/users/octocat/events{/privacy}",
+      received_events_url:
+        "https://api.github.com/users/octocat/received_events",
+      type: "User",
+      site_admin: false,
+    },
+    open_issues: 4,
+    closed_issues: 8,
+    created_at: "2011-04-10T20:09:31Z",
+    updated_at: "2014-03-03T18:58:10Z",
+    closed_at: "2013-02-12T13:22:01Z",
+    due_on: "2012-10-09T23:39:01Z",
+  },
+];
 
-jest.mock("../../lib/dataHandler");
-const mockedFilterDataHandler = filterDataHandler as jest.Mock<any>;
+export const mockAssignee = [
+  {
+    login: "octocat",
+    id: 1,
+    node_id: "MDQ6VXNlcjE=",
+    avatar_url: "https://github.com/images/error/octocat_happy.gif",
+    gravatar_id: "",
+    url: "https://api.github.com/users/octocat",
+    html_url: "https://github.com/octocat",
+    followers_url: "https://api.github.com/users/octocat/followers",
+    following_url:
+      "https://api.github.com/users/octocat/following{/other_user}",
+    gists_url: "https://api.github.com/users/octocat/gists{/gist_id}",
+    starred_url: "https://api.github.com/users/octocat/starred{/owner}{/repo}",
+    subscriptions_url: "https://api.github.com/users/octocat/subscriptions",
+    organizations_url: "https://api.github.com/users/octocat/orgs",
+    repos_url: "https://api.github.com/users/octocat/repos",
+    events_url: "https://api.github.com/users/octocat/events{/privacy}",
+    received_events_url: "https://api.github.com/users/octocat/received_events",
+    type: "User",
+    site_admin: false,
+  },
+];
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
+export const mockLabels = [
+  {
+    id: 208045946,
+    node_id: "MDU6TGFiZWwyMDgwNDU5NDY=",
+    url: "https://api.github.com/repos/octocat/Hello-World/labels/bug",
+    name: "bug",
+    description: "Something isn't working",
+    color: "f29513",
+    default: true,
+  },
+  {
+    id: 208045947,
+    node_id: "MDU6TGFiZWwyMDgwNDU5NDc=",
+    url: "https://api.github.com/repos/octocat/Hello-World/labels/enhancement",
+    name: "enhancement",
+    description: "New feature or request",
+    color: "a2eeef",
+    default: false,
+  },
+];
 
-const issues = [
+export const mockIssues = [
   {
     id: 1,
     node_id: "MDU6SXNzdWUx",
@@ -25,7 +102,7 @@ const issues = [
     html_url: "https://github.com/octocat/Hello-World/issues/1347",
     number: 1347,
     state: "open",
-    title: "Found a lovely bug",
+    title: "Found a bug",
     body: "I'm having a problem with this.",
     user: {
       login: "octocat",
@@ -62,7 +139,7 @@ const issues = [
       },
     ],
     assignee: {
-      login: "octocatlove",
+      login: "octocat",
       id: 1,
       node_id: "MDQ6VXNlcjE=",
       avatar_url: "https://github.com/images/error/octocat_happy.gif",
@@ -86,7 +163,7 @@ const issues = [
     },
     assignees: [
       {
-        login: "octocatlover",
+        login: "octocat",
         id: 1,
         node_id: "MDQ6VXNlcjE=",
         avatar_url: "https://github.com/images/error/octocat_happy.gif",
@@ -99,7 +176,8 @@ const issues = [
         gists_url: "https://api.github.com/users/octocat/gists{/gist_id}",
         starred_url:
           "https://api.github.com/users/octocat/starred{/owner}{/repo}",
-        subscriptions_url: "https://api.github.com/users/octocat/subscriptions",
+        subscriptions_url:
+          "https://api.github.com/users/octocat/subscriptions",
         organizations_url: "https://api.github.com/users/octocat/orgs",
         repos_url: "https://api.github.com/users/octocat/repos",
         events_url: "https://api.github.com/users/octocat/events{/privacy}",
@@ -118,7 +196,7 @@ const issues = [
       node_id: "MDk6TWlsZXN0b25lMTAwMjYwNA==",
       number: 1,
       state: "open",
-      title: "v1.0.99",
+      title: "v1.0",
       description: "Tracking milestone for version 1.0",
       creator: {
         login: "octocat",
@@ -134,7 +212,8 @@ const issues = [
         gists_url: "https://api.github.com/users/octocat/gists{/gist_id}",
         starred_url:
           "https://api.github.com/users/octocat/starred{/owner}{/repo}",
-        subscriptions_url: "https://api.github.com/users/octocat/subscriptions",
+        subscriptions_url:
+          "https://api.github.com/users/octocat/subscriptions",
         organizations_url: "https://api.github.com/users/octocat/orgs",
         repos_url: "https://api.github.com/users/octocat/repos",
         events_url: "https://api.github.com/users/octocat/events{/privacy}",
@@ -163,203 +242,5 @@ const issues = [
     created_at: "2011-04-22T13:33:48Z",
     updated_at: "2011-04-22T13:33:48Z",
     author_association: "COLLABORATOR",
-  },
+  }
 ];
-test("renders the table", () => {
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={issues}
-      loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={false}
-      onSubmit={(f) => f}
-    />
-  );
-  expect(screen.getByRole("table")).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Milestones",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "State",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Assignee",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Creator",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Mentioned",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Labels",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("heading", {
-      name: "Sort",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("row", {
-      name: "Found a lovely bug bug #1347 | Status: open | Opened by: octocat | Opened on: Friday, 22 April 2011",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("link", {
-      name: "Found a lovely bug",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("navigation", {
-      name: "Pagination",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("link", {
-      name: "Previous Page",
-    })
-  ).toBeInTheDocument();
-
-  expect(
-    screen.getByRole("link", {
-      name: "Next Page",
-    })
-  ).toBeInTheDocument();
-});
-
-test("navigates table to next page", () => {
-  const onSubmitMockHandler = jest.fn();
-
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={issues}
-      loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={false}
-      onSubmit={onSubmitMockHandler}
-    />
-  );
-
-  const nextPage = screen.getByRole("link", {
-    name: "Next Page",
-  });
-  fireEvent.click(nextPage);
-
-  expect(onSubmitMockHandler).toHaveBeenCalledWith({page: 3});
-  onSubmitMockHandler.mockReset()
-});
-
-test("render error message", () => {
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={issues}
-      loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={true}
-      onSubmit={f => f}
-    />
-  );
-
-  expect(
-    screen.getByText("Ooops! An error occured. Please try later")
-  ).toBeInTheDocument();
-});
-
-test("render empty issues message", () => {
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={[]}
-      loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={false}
-      onSubmit={(f) => f}
-    />
-  );
-
-  expect(
-    screen.getByText("There are no results matching your filters")
-  ).toBeInTheDocument();
-});
-
-test("render loading state", () => {
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={[]}
-      loading={true}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={false}
-      onSubmit={(f) => f}
-    />
-  );
-
-  expect(
-    screen.getByTestId("spinner")
-  ).toBeInTheDocument();
-});
-
-test("handles error while fetching filters", async () => {
-  const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-  
-  mockedFilterDataHandler.mockImplementation(() =>
-    Promise.reject("Error")
-  );
-
-  render(
-    <ResultsTable
-      currentPage={2}
-      issues={issues}
-      loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
-      error={false}
-      onSubmit={(f) => f}
-    />
-  );
-  await screen.findByText(/Found a lovely bug/i);
-  expect(consoleSpy).toHaveBeenCalledWith("Unable to fetch filters");
-});

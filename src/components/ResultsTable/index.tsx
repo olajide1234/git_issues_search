@@ -7,7 +7,7 @@ import type { DropdownfilterGroup, Issue, GlobalFilters } from "../../types";
 import DropdownHeader from "../DropdownHeader";
 import TableRow from "../TableRow";
 import {
-  dataHandler,
+  filterDataHandler,
   getAssigneesCommand,
   getMilestonesCommand,
   getLabelsCommand,
@@ -48,23 +48,22 @@ const ResultsTable: FC<ResultsTableProp> = ({
 
   useEffect(() => {
     async function fetchFilters(): Promise<void> {
-      console.log("ffe insude");
       try {
         // TODO: We can load this data non-sequentially or let each component load its data so they dont block UI
-        const milestonesData = await dataHandler.execute(
+        const milestonesData = await filterDataHandler(
           getMilestonesCommand(repoDetails)
         );
-        const assigneesData = await dataHandler.execute(
+        const assigneesData = await filterDataHandler(
           getAssigneesCommand(repoDetails)
         );
-        const labelsData = await dataHandler.execute(
+        const labelsData = await filterDataHandler(
           getLabelsCommand(repoDetails)
         );
         milestonesData && setMilestones(milestonesData);
         assigneesData && setAssignees(assigneesData);
         labelsData && setLabels(labelsData);
       } catch (error) {
-        console.log("Unable to fetch filters");
+        console.warn("Unable to fetch filters");
       }
     }
     fetchFilters();
@@ -174,17 +173,19 @@ const ResultsTable: FC<ResultsTableProp> = ({
                 <tr>
                   <td>
                     <p className="notifText">
-                      <Spinner size="medium" />
+                      <Spinner data-testid="spinner" size="medium" />
                     </p>
                   </td>
                 </tr>
               ) : (
                 <tr>
-                  <p className="notifText">
-                    {error
-                      ? "Ooops! An error occured. Please try later"
-                      : "There are no results matching your filters"}
-                  </p>
+                  <td>
+                    <p className="notifText">
+                      {error
+                        ? "Ooops! An error occured. Please try later"
+                        : "There are no results matching your filters"}
+                    </p>
+                  </td>
                 </tr>
               )
             ) : (

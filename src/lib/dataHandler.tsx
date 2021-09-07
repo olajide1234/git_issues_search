@@ -3,19 +3,27 @@ import getIssues from "../server/routes/getIssues";
 import getAssignees from "../server/routes/getAssignees";
 import getLabels from "../server/routes/getLabels";
 
-import type { GlobalFilters } from "../types";
-import type { DropdownfilterGroup } from "../types";
+import type { DropdownfilterGroup, Issue, GlobalFilters } from "../types";
 
 type FilterArgumentType = Pick<GlobalFilters, "owner" | "repo">;
 
-class DataHandlers {
-  execute(command: any) {
-    const data = command.execute(command.value);
-    return data;
-  }
-}
+export const filterDataHandler = async function (command: {
+  execute: (
+    value: FilterArgumentType
+  ) => Promise<DropdownfilterGroup | undefined>;
+  value: FilterArgumentType;
+}) {
+  const data = await command.execute(command.value);
+  return data;
+};
 
-export const dataHandler = new DataHandlers()
+export const issueDataHandler = async function (command: {
+  execute: (value: GlobalFilters) => Promise<Issue[]>;
+  value: GlobalFilters;
+}) {
+  const data = await command.execute(command.value);
+  return data;
+};
 
 export const getAssigneesCommand = function (value: FilterArgumentType) {
   const { owner, repo } = value;
@@ -23,16 +31,20 @@ export const getAssigneesCommand = function (value: FilterArgumentType) {
 };
 
 async function getParsedAssignees(value: FilterArgumentType) {
-  const assignees = await getAssignees(value);
-  const parsedAssignees: DropdownfilterGroup = [];
-  assignees.forEach((assignee) => {
-    parsedAssignees.push({
-      id: assignee.login,
-      primaryText: assignee.login,
-      name: "assignee",
+  try {
+    const assignees = await getAssignees(value);
+    const parsedAssignees: DropdownfilterGroup = [];
+    assignees.forEach((assignee) => {
+      parsedAssignees.push({
+        id: assignee.login,
+        primaryText: assignee.login,
+        name: "assignee",
+      });
     });
-  });
-  return parsedAssignees;
+    return parsedAssignees;
+  } catch (error) {
+    console.warn("Error getting assignees filter");
+  }
 }
 
 export const getMilestonesCommand = function (value: FilterArgumentType) {
@@ -41,16 +53,20 @@ export const getMilestonesCommand = function (value: FilterArgumentType) {
 };
 
 async function getParsedMilestones(value: FilterArgumentType) {
-  const milestones = await getMilestone(value);
-  const parsedMilestones: DropdownfilterGroup = [];
-  milestones.forEach((milestone) => {
-    parsedMilestones.push({
-      id: milestone.number,
-      primaryText: milestone.title,
-      name: "milestone",
+  try {
+    const milestones = await getMilestone(value);
+    const parsedMilestones: DropdownfilterGroup = [];
+    milestones.forEach((milestone) => {
+      parsedMilestones.push({
+        id: milestone.number,
+        primaryText: milestone.title,
+        name: "milestone",
+      });
     });
-  });
-  return parsedMilestones;
+    return parsedMilestones;
+  } catch (error) {
+    console.warn("Error getting milestone filters");
+  }
 }
 
 export const getLabelsCommand = function (value: FilterArgumentType) {
@@ -59,16 +75,20 @@ export const getLabelsCommand = function (value: FilterArgumentType) {
 };
 
 async function getParsedLabels(value: FilterArgumentType) {
-  const labels = await getLabels(value);
-  const parsedLabels: DropdownfilterGroup = [];
-  labels.forEach((label) => {
-    parsedLabels.push({
-      id: label.name,
-      primaryText: label.name,
-      name: "labels",
+  try {
+    const labels = await getLabels(value);
+    const parsedLabels: DropdownfilterGroup = [];
+    labels.forEach((label) => {
+      parsedLabels.push({
+        id: label.name,
+        primaryText: label.name,
+        name: "labels",
+      });
     });
-  });
-  return parsedLabels;
+    return parsedLabels;
+  } catch (error) {
+    console.warn("Error getting label filters");
+  }
 }
 
 export const getIssuesCommand = function (value: GlobalFilters) {
