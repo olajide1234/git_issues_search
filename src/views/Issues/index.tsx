@@ -42,7 +42,6 @@ const Issues: FC = () => {
     async function fetchIssues(): Promise<void> {
       setLoading(true);
       try {
-        console.log("fetching");
         const response = await issueDataHandler(
           getIssuesCommand(globalFilters)
         );
@@ -54,7 +53,7 @@ const Issues: FC = () => {
           throw new Error("Response is not an array");
         }
       } catch (error) {
-        console.log("Error fetching issues");
+        console.warn("Error fetching issues");
         setLoading(false);
         setError(true);
       }

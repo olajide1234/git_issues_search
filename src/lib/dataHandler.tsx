@@ -33,14 +33,11 @@ export const getAssigneesCommand = function (value: FilterArgumentType) {
 async function getParsedAssignees(value: FilterArgumentType) {
   try {
     const assignees = await getAssignees(value);
-    const parsedAssignees: DropdownfilterGroup = [];
-    assignees.forEach((assignee) => {
-      parsedAssignees.push({
-        id: assignee.login,
-        primaryText: assignee.login,
-        name: "assignee",
-      });
-    });
+    const parsedAssignees: DropdownfilterGroup = assignees.map((assignee) => ({
+      id: assignee.login,
+      primaryText: assignee.login,
+      name: "assignee",
+    }));
     return parsedAssignees;
   } catch (error) {
     console.warn("Error getting assignees filter");
@@ -55,14 +52,13 @@ export const getMilestonesCommand = function (value: FilterArgumentType) {
 async function getParsedMilestones(value: FilterArgumentType) {
   try {
     const milestones = await getMilestone(value);
-    const parsedMilestones: DropdownfilterGroup = [];
-    milestones.forEach((milestone) => {
-      parsedMilestones.push({
+    const parsedMilestones: DropdownfilterGroup = milestones.map(
+      (milestone) => ({
         id: milestone.number,
         primaryText: milestone.title,
         name: "milestone",
-      });
-    });
+      })
+    );
     return parsedMilestones;
   } catch (error) {
     console.warn("Error getting milestone filters");
@@ -77,14 +73,11 @@ export const getLabelsCommand = function (value: FilterArgumentType) {
 async function getParsedLabels(value: FilterArgumentType) {
   try {
     const labels = await getLabels(value);
-    const parsedLabels: DropdownfilterGroup = [];
-    labels.forEach((label) => {
-      parsedLabels.push({
+    const parsedLabels: DropdownfilterGroup = labels.map((label) => ({
         id: label.name,
         primaryText: label.name,
         name: "labels",
-      });
-    });
+      }));
     return parsedLabels;
   } catch (error) {
     console.warn("Error getting label filters");

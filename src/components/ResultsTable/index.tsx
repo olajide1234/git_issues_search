@@ -51,13 +51,19 @@ const ResultsTable: FC<ResultsTableProp> = ({
       try {
         // TODO: We can load this data non-sequentially or let each component load its data so they dont block UI
         const milestonesData = await filterDataHandler(
-          getMilestonesCommand(repoDetails)
+          getMilestonesCommand({
+            owner: repoDetails.owner,
+            repo: repoDetails.repo,
+          })
         );
         const assigneesData = await filterDataHandler(
-          getAssigneesCommand(repoDetails)
+          getAssigneesCommand({
+            owner: repoDetails.owner,
+            repo: repoDetails.repo,
+          })
         );
         const labelsData = await filterDataHandler(
-          getLabelsCommand(repoDetails)
+          getLabelsCommand({ owner: repoDetails.owner, repo: repoDetails.repo })
         );
         milestonesData && setMilestones(milestonesData);
         assigneesData && setAssignees(assigneesData);
@@ -67,7 +73,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
       }
     }
     fetchFilters();
-  }, [repoDetails]);
+  }, [repoDetails.owner, repoDetails.repo]);
 
   // TODO: implement search functionality for all dropdowns
   return (
