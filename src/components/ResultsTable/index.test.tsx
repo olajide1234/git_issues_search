@@ -276,8 +276,8 @@ test("navigates table to next page", () => {
   });
   fireEvent.click(nextPage);
 
-  expect(onSubmitMockHandler).toHaveBeenCalledWith({page: 3});
-  onSubmitMockHandler.mockReset()
+  expect(onSubmitMockHandler).toHaveBeenCalledWith({ page: 3 });
+  onSubmitMockHandler.mockReset();
 });
 
 test("render error message", () => {
@@ -291,7 +291,7 @@ test("render error message", () => {
         repo: "typescript",
       }}
       error={true}
-      onSubmit={f => f}
+      onSubmit={(f) => f}
     />
   );
 
@@ -335,17 +335,13 @@ test("render loading state", () => {
     />
   );
 
-  expect(
-    screen.getByTestId("spinner")
-  ).toBeInTheDocument();
+  expect(screen.getByTestId("spinner")).toBeInTheDocument();
 });
 
 test("handles error while fetching filters", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-  
-  mockedFilterDataHandler.mockImplementation(() =>
-    Promise.reject("Error")
-  );
+
+  mockedFilterDataHandler.mockImplementation(() => Promise.reject("Error"));
 
   render(
     <ResultsTable

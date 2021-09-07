@@ -206,7 +206,9 @@ test("fetches data for table", async () => {
 
 test("handles data fetch error", async () => {
   render(<Issues />);
-  mockedIssueDataHandler.mockImplementation(() => Promise.resolve({error: "error"}));
+  mockedIssueDataHandler.mockImplementation(() =>
+    Promise.resolve({ error: "error" })
+  );
 
   const repoOwnerForm = screen.getByRole("textbox", {
     name: "Repository owner",

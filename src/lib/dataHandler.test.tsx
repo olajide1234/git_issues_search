@@ -241,7 +241,6 @@ test("gets issues", async () => {
   ]);
 });
 
-
 test("handle get assignees filter error", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
   mockedGetAssignees.mockImplementation(() => Promise.reject("Error"));
@@ -259,15 +258,15 @@ test("handle get milestone filter error", async () => {
   await filterDataHandler(
     getMilestonesCommand({ owner: "testowner", repo: "testrepo" })
   );
- expect(consoleSpy).toHaveBeenCalledWith("Error getting milestone filters");
+  expect(consoleSpy).toHaveBeenCalledWith("Error getting milestone filters");
 });
 
 test("handle get labels filter error", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
   mockedGetLabels.mockImplementation(() => Promise.reject("Error"));
 
-    await filterDataHandler(
-      getLabelsCommand({ owner: "testowner", repo: "testrepo" })
-    );
-   expect(consoleSpy).toHaveBeenCalledWith("Error getting label filters");
+  await filterDataHandler(
+    getLabelsCommand({ owner: "testowner", repo: "testrepo" })
+  );
+  expect(consoleSpy).toHaveBeenCalledWith("Error getting label filters");
 });

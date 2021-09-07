@@ -1,4 +1,4 @@
-import React, { Fragment, useState,  useEffect, useRef } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { Box, Pagehead } from "@primer/components";
 
 import type { FC } from "react";
@@ -58,7 +58,7 @@ const Issues: FC = () => {
         setLoading(false);
         setError(true);
       }
-    };
+    }
 
     if (didMount.current) fetchIssues();
     else didMount.current = true;
