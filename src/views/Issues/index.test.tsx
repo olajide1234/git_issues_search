@@ -13,7 +13,7 @@ test("renders the header", () => {
 test("renders the welcome text", () => {
   render(<Issues />);
   const welcomeText = screen.getByText(
-    /👋 Search, filter and view Github issues from any repository/i
+    "👋 Search, filter and view Github issues from any repository"
   );
   expect(welcomeText).toBeInTheDocument();
 });
