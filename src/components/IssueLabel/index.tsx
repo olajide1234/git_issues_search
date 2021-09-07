@@ -18,9 +18,9 @@ interface IssueLabelProps {
 const IssueLabel: FC<IssueLabelProps> = ({ labels }) => {
   return (
     <Fragment>
-      {labels.map((label, i) => (
+      {labels.map((label) => (
         <Label
-          key={i}
+          key={label.id}
           variant="medium"
           sx={{ bg: label.color, color: "#24292E", m: 1 }}
         >

@@ -15,8 +15,8 @@ interface TableRowProps {
 const TableRow: FC<TableRowProps> = ({ issues }) => {
   return (
     <Fragment>
-      {issues.map((issue, i) => (
-        <tr key={i}>
+      {issues.map((issue) => (
+        <tr key={issue.id}>
           <div className="rowContent">
             <td>
               <span>

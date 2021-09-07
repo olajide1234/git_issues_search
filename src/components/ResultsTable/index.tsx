@@ -6,6 +6,12 @@ import type { DropdownfilterGroup, Issue, GlobalFilters } from "../../types";
 
 import DropdownHeader from "../DropdownHeader";
 import TableRow from "../TableRow";
+import {
+  dataHandler,
+  getAssigneesCommand,
+  getMilestonesCommand,
+  getLabelsCommand,
+} from "../../lib/dataHandler";
 
 import "./index.scss";
 
@@ -23,23 +29,9 @@ const ResultsTable: FC<ResultsTableProp> = ({
   onSubmit,
   repoDetails,
 }) => {
-  const [milestones, setMilestones] = useState<DropdownfilterGroup>([
-    {
-      id: "test",
-      primaryText: "testyin",
-      name: "milestone",
-    },
-  ]);
-  const [assignees, setAssignees] = useState<DropdownfilterGroup>([
-    { id: "tesst", primaryText: "jij", name: "assignee" },
-  ]);
-  const [labels, setLabels] = useState<DropdownfilterGroup>([
-    {
-      id: "test",
-      primaryText: "testing",
-      name: "labels",
-    },
-  ]);
+  const [milestones, setMilestones] = useState<DropdownfilterGroup>([]);
+  const [assignees, setAssignees] = useState<DropdownfilterGroup>([]);
+  const [labels, setLabels] = useState<DropdownfilterGroup>([]);
 
   const handleItemClick = (input: Partial<GlobalFilters>) => onSubmit(input);
 
@@ -51,6 +43,30 @@ const ResultsTable: FC<ResultsTableProp> = ({
     handleItemClick({ page: number });
   };
   const isResultEmptyOrError = issues.length < 1 || error;
+
+  useEffect(() => {
+    async function fetchFilters(): Promise<void> {
+      console.log('ffe insude')
+      try {
+        // TODO: We can load this data non-sequentially or let each component load its data so they dont block UI
+        const milestonesData = await dataHandler.execute(
+          getMilestonesCommand(repoDetails)
+        );
+        const assigneesData = await dataHandler.execute(
+          getAssigneesCommand(repoDetails)
+        );
+        const labelsData = await dataHandler.execute(
+          getLabelsCommand(repoDetails)
+        );
+        milestonesData && setMilestones(milestonesData);
+        assigneesData && setAssignees(assigneesData);
+        labelsData && setLabels(labelsData);
+      } catch (error) {
+        console.log('Unable to fetch filters')
+      }
+    }
+    fetchFilters();
+  }, [repoDetails]);
 
   // TODO: implement search functionality for all dropdowns
   return (
