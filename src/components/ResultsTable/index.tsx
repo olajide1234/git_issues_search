@@ -171,12 +171,12 @@ const ResultsTable: FC<ResultsTableProp> = ({
           </tbody>
         </table>
       </Box>
-      <Pagination
+      {isResultEmptyOrErrorOrLoading ? null : <Pagination
         pageCount={300}
         currentPage={currentPage}
         onPageChange={HandlePageChange}
         showPages={false}
-      />
+      />}
     </Fragment>
   );
 };
