@@ -1,14 +1,6 @@
-import React, { Fragment, useState } from "react";
-import { Box, Pagehead } from "@primer/components";
-
-import type { FC } from "react";
-import type { GlobalFilters } from "../../types";
-
-import PageHeader from "../../components/PageHeader";
-import RepoSearchForm from "../../components/RepoSearchForm";
-import ResultsTable from "../../components/ResultsTable";
-
-import "./index.scss";
+import React from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import ResultsTable from "./index";
 
 const issues = [
   {
@@ -25,7 +17,7 @@ const issues = [
     html_url: "https://github.com/octocat/Hello-World/issues/1347",
     number: 1347,
     state: "open",
-    title: "Found a bug",
+    title: "Found a lovely bug",
     body: "I'm having a problem with this.",
     user: {
       login: "octocat",
@@ -62,7 +54,7 @@ const issues = [
       },
     ],
     assignee: {
-      login: "octocat",
+      login: "octocatlove",
       id: 1,
       node_id: "MDQ6VXNlcjE=",
       avatar_url: "https://github.com/images/error/octocat_happy.gif",
@@ -86,7 +78,7 @@ const issues = [
     },
     assignees: [
       {
-        login: "octocat",
+        login: "octocatlover",
         id: 1,
         node_id: "MDQ6VXNlcjE=",
         avatar_url: "https://github.com/images/error/octocat_happy.gif",
@@ -118,7 +110,7 @@ const issues = [
       node_id: "MDk6TWlsZXN0b25lMTAwMjYwNA==",
       number: 1,
       state: "open",
-      title: "v1.0",
+      title: "v1.0.99",
       description: "Tracking milestone for version 1.0",
       creator: {
         login: "octocat",
@@ -165,66 +157,153 @@ const issues = [
     author_association: "COLLABORATOR",
   },
 ];
-
-const Issues: FC = () => {
-  const [globalFilters, setGlobalFilters] = useState<GlobalFilters>({
-    owner: "",
-    repo: "",
-    milestone: "",
-    state: "open",
-    assignee: "",
-    creator: "",
-    mentioned: "",
-    labels: "",
-    sort: "",
-    direction: "",
-    per_page: 10,
-    page: 1,
-  });
-  const [error, setError] = useState(false);
-
-  // alternatively, we can use useReducer and useContext to avoid function plumbing
-  const handleSearchSubmit = async (
-    searchInput: Partial<GlobalFilters>
-  ): Promise<void> => {
-    setGlobalFilters((prevState) => ({ ...prevState, ...searchInput }));
-  };
-
-  const isRepoInfoSet =
-    Boolean(globalFilters.owner) && Boolean(globalFilters.repo);
-
-  return (
-    <Fragment>
-      <PageHeader />
-
-      <Box display="grid" gridGap={3}>
-        <Box
-          m={3}
-          p={3}
-          borderColor="border.primary"
-          borderWidth={1}
-          borderStyle="solid"
-        >
-          <Pagehead className="pageHeadText">
-            👋 Search, filter and view Github issues from any repository
-          </Pagehead>
-          <RepoSearchForm onSubmit={handleSearchSubmit} />
-        </Box>
-        {isRepoInfoSet ? (
-          <ResultsTable
-            currentPage={globalFilters.page}
-            issues={issues}
-            repoDetails={{
-              owner: globalFilters.owner,
-              repo: globalFilters.repo,
-            }}
-            error={error}
-            onSubmit={handleSearchSubmit}
-          />
-        ) : null}
-      </Box>
-    </Fragment>
+test("renders the table", () => {
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={issues}
+      repoDetails={{
+        owner: "microsoft",
+        repo: "typescript",
+      }}
+      error={false}
+      onSubmit={(f) => f}
+    />
   );
-};
+  expect(screen.getByRole("table")).toBeInTheDocument();
 
-export default Issues;
+  expect(
+    screen.getByRole("columnheader", {
+      name: "Milestones",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("columnheader", {
+      name: "State",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("columnheader", {
+      name: "Assignee",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("columnheader", {
+      name: "Creator",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("columnheader", {
+      name: "Mentioned",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("columnheader", {
+      name: "Labels",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("heading", {
+      name: "Sort",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("row", {
+      name: "Found a lovely bug bug #1347 | Status: open | Opened by: octocat | Opened on: Friday, 22 April 2011",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("link", {
+      name: "Found a lovely bug",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("navigation", {
+      name: "Pagination",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("link", {
+      name: "Previous Page",
+    })
+  ).toBeInTheDocument();
+
+  expect(
+    screen.getByRole("link", {
+      name: "Next Page",
+    })
+  ).toBeInTheDocument();
+});
+
+test("navigates table to next page", () => {
+  const onSubmitMockHandler = jest.fn();
+
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={issues}
+      repoDetails={{
+        owner: "microsoft",
+        repo: "typescript",
+      }}
+      error={false}
+      onSubmit={onSubmitMockHandler}
+    />
+  );
+
+  const nextPage = screen.getByRole("link", {
+    name: "Next Page",
+  });
+  fireEvent.click(nextPage);
+
+  expect(onSubmitMockHandler).toHaveBeenCalledWith({page: 3});
+  onSubmitMockHandler.mockReset()
+});
+
+test("render error message", () => {
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={issues}
+      repoDetails={{
+        owner: "microsoft",
+        repo: "typescript",
+      }}
+      error={true}
+      onSubmit={f => f}
+    />
+  );
+
+  expect(
+    screen.getByText("Ooops! An error occured. Please try later")
+  ).toBeInTheDocument();
+});
+
+test("render empty issues message", () => {
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={[]}
+      repoDetails={{
+        owner: "microsoft",
+        repo: "typescript",
+      }}
+      error={false}
+      onSubmit={(f) => f}
+    />
+  );
+
+  expect(
+    screen.getByText("There are no results matching your filters")
+  ).toBeInTheDocument();
+});

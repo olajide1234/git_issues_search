@@ -1,0 +1,25 @@
+$border-color: #ddd;
+
+.notifText {
+  text-align: center;
+  padding: 4rem;
+}
+
+td {
+  border-top: 1px solid $border-color;
+}
+
+th {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.tableBody {
+  width: 100%;
+}
+
+.tableRow {
+  display: flex;
+  justify-content: space-between;
+}
+
