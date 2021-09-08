@@ -1,4 +1,10 @@
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, {
+  Fragment,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
 import { Box, Pagehead } from "@primer/components";
 
 import type { FC } from "react";
@@ -31,12 +37,13 @@ const Issues: FC = () => {
   const [loading, setLoading] = useState(true);
   const didMount = useRef(false);
 
-  // alternatively, we can use useReducer and useContext to avoid function plumbing
-  const handleSearchSubmit = async (
-    searchInput: Partial<GlobalFilters>
-  ): Promise<void> => {
-    setGlobalFilters((prevState) => ({ ...prevState, ...searchInput }));
-  };
+  // alternatively, we can use useReducer and useContext to avoid passing callbacks down
+  const memoizedHandleSearchSubmit = useCallback(
+    async (searchInput: Partial<GlobalFilters>): Promise<void> => {
+      setGlobalFilters((prevState) => ({ ...prevState, ...searchInput }));
+    },
+    []
+  );
 
   useEffect(() => {
     async function fetchIssues(): Promise<void> {
@@ -50,12 +57,12 @@ const Issues: FC = () => {
           setLoading(false);
           error && setError(false);
         } else {
+          setError(true);
+          setLoading(false);
           throw new Error("Response is not an array");
         }
       } catch (error) {
         console.warn("Error fetching issues");
-        setLoading(false);
-        setError(true);
       }
     }
 
@@ -65,7 +72,6 @@ const Issues: FC = () => {
 
   const isRepoInfoSet =
     Boolean(globalFilters.owner) && Boolean(globalFilters.repo);
-
   return (
     <Fragment>
       <PageHeader />
@@ -78,10 +84,10 @@ const Issues: FC = () => {
           borderWidth={1}
           borderStyle="solid"
         >
-          <Pagehead className="pageHeadText">
+          <Pagehead className="contentBox__text">
             👋 Search, filter and view Github issues from any repository
           </Pagehead>
-          <RepoSearchForm onSubmit={handleSearchSubmit} />
+          <RepoSearchForm onSubmit={memoizedHandleSearchSubmit} />
         </Box>
         {isRepoInfoSet ? (
           <ResultsTable
@@ -90,7 +96,7 @@ const Issues: FC = () => {
             error={error}
             issues={issues}
             loading={loading}
-            onSubmit={handleSearchSubmit}
+            onSubmit={memoizedHandleSearchSubmit}
           />
         ) : null}
       </Box>

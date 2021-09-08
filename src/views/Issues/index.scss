@@ -1,9 +1,9 @@
-.pageHeadText {
-  text-align: center;
-}
-
 .contentBox {
   display: block;
+
+  &__text {
+    text-align: center;
+  }
 }
 
 @media (min-width: 600px) {

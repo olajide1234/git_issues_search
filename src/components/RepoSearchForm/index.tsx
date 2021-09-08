@@ -6,10 +6,10 @@ import type { GlobalFilters } from "../../types";
 
 import "./index.scss";
 
-interface RepoSearchFormProps {
+interface RepoSearchFormProp {
   onSubmit: (inputs: Pick<GlobalFilters, "owner" | "repo">) => void;
 }
-const RepoSearchForm: FC<RepoSearchFormProps> = ({ onSubmit }) => {
+const RepoSearchForm: FC<RepoSearchFormProp> = ({ onSubmit }) => {
   const [respositoryOwner, setRespositoryOwner] = useState("");
   const [respositoryName, setRespositoryName] = useState("");
 
@@ -24,7 +24,7 @@ const RepoSearchForm: FC<RepoSearchFormProps> = ({ onSubmit }) => {
   const handleSearchSubmit = (): void => {
     const dataValidation = validateFormData(respositoryOwner, respositoryName);
     if (dataValidation) {
-      onSubmit({ owner: respositoryOwner, repo: respositoryName });
+      onSubmit({ owner: respositoryOwner.trim(), repo: respositoryName.trim() });
     }
   };
 
@@ -64,7 +64,10 @@ const RepoSearchForm: FC<RepoSearchFormProps> = ({ onSubmit }) => {
           value={respositoryName}
         />
       </FormGroup>
-      <ButtonPrimary className="submitButton" onClick={handleSearchSubmit}>
+      <ButtonPrimary
+        className="formContainer__submitButton"
+        onClick={handleSearchSubmit}
+      >
         Search
       </ButtonPrimary>
     </span>

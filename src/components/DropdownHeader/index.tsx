@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { SelectMenu, Text } from "@primer/components";
 
 import type { FC } from "react";
@@ -22,39 +22,49 @@ const DropdownHeader: FC<DropdownHeaderProps> = ({
   align,
   width,
 }) => {
-  const handleItemClick = (param: Partial<GlobalFilters>) =>
-    clickHandler(param);
+  
+  const dropDownComponent = useMemo(() => {
+    const handleItemClick = (param: Partial<GlobalFilters>) =>
+      clickHandler(param);
 
-  const updatedContent = [
-    { id: "", name: content[0]?.name, primaryText: "RESET FILTER" },
-    ...content,
-  ];
-  return (
-    <SelectMenu css>
-      <Text as="summary" className="title">
-        {name}
-        <span className="dropdownIcon"></span>
-      </Text>
-      <SelectMenu.Modal
-        className="dropdownModal"
-        align={align ? align : undefined}
-        width={width ? width : "300px"}
-      >
-        <SelectMenu.Header>{name}</SelectMenu.Header>
-        <SelectMenu.List>
-          {updatedContent.map((item, i) => (
-            <SelectMenu.Item
-              key={i}
-              selected={activeFilter[item.name] === item.id}
-              onClick={() => handleItemClick({ [item.name]: item.id })}
-            >
-              {item.primaryText} {item?.secondaryText}
-            </SelectMenu.Item>
-          ))}
-        </SelectMenu.List>
-      </SelectMenu.Modal>
-    </SelectMenu>
-  );
+    const updatedContent = [
+      { id: "", name: content[0]?.name, primaryText: "RESET FILTER" },
+      ...content,
+    ];
+
+    return (
+      <SelectMenu css className="dropDown">
+        <Text as="summary" className="dropDown__title">
+          {name}
+          <span className="dropDown__icon--hidden"></span>
+        </Text>
+        <SelectMenu.Modal
+          className="dropDown__modal"
+          align={align ? align : undefined}
+          width={width ? width : "300px"}
+        >
+          <SelectMenu.Header>{name}</SelectMenu.Header>
+          <SelectMenu.List>
+            {updatedContent.map((item, i) => {
+              const onClick = (): void =>
+                handleItemClick({ [item.name]: item.id });
+              return (
+                <SelectMenu.Item
+                  key={i}
+                  selected={activeFilter[item.name] === item.id}
+                  onClick={onClick}
+                >
+                  {item.primaryText} {item?.secondaryText}
+                </SelectMenu.Item>
+              );
+            })}
+          </SelectMenu.List>
+        </SelectMenu.Modal>
+      </SelectMenu>
+    );
+  }, [activeFilter, align, clickHandler, content, name, width]);
+
+  return dropDownComponent;
 };
 
 export default DropdownHeader;

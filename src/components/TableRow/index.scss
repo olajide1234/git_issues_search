@@ -4,26 +4,28 @@ $border-color: #ddd;
   display: grid;
   margin-top: 1rem;
   border-top: 1px solid $border-color;
-}
 
-.rowData {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
+  &__title {
+    display: block;
+    padding: 1rem;
+  }
 
-.rowDetails {
-  display: flex;
-  flex-direction: column;
-}
+  &__details {
+    display: flex;
+    flex-direction: column;
+  }
 
-.rowTitle {
-  display: block;
-  padding: 1rem;
+  &__data {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
 
 @media (min-width: 600px) {
-.rowDetails {
-  display: flex;
-  flex-direction: row;
-}
+  .rowContent {
+    &__details {
+      display: flex;
+      flex-direction: row;
+    }
+  }
 }

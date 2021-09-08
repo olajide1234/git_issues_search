@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { Link } from "@primer/components";
 
 import type { FC } from "react";
@@ -13,40 +13,44 @@ interface TableRowProps {
 }
 
 const TableRow: FC<TableRowProps> = ({ issues }) => {
-  return (
-    <Fragment>
-      {issues.map((issue) => (
-        <tr key={issue.id}>
-          <td>
-            <div className="rowContent">
-              <span>
-                <span className="rowTitle">
-                  <Link href={issue.html_url}>{issue.title}</Link>
-                  <span>
-                    <IssueLabel labels={issue.labels} />
+  const dropDownComponent = useMemo(() => {
+    return (
+      <Fragment>
+        {issues.map((issue) => (
+          <tr key={issue.id}>
+            <td>
+              <div className="rowContent">
+                <span>
+                  <span className="rowContent__title">
+                    <Link href={issue.html_url}>{issue.title}</Link>
+                    <span>
+                      <IssueLabel labels={issue.labels} />
+                    </span>
                   </span>
                 </span>
-              </span>
-              <span className="rowDetails">
-                <span className="rowData">#{issue.number}</span> 
-                <span className="rowData">Status: {issue.state}</span> 
-                <span className="rowData">Opened by: {issue.user.login}</span> 
-                <span className="rowData">
-                  Opened on: &nbsp;
-                  {new Date(issue.created_at).toLocaleDateString(undefined, {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                <span className="rowContent__details">
+                  <span className="rowContent__data">#{issue.number}</span>
+                  <span className="rowContent__data">Status: {issue.state}</span>
+                  <span className="rowContent__data">Opened by: {issue.user.login}</span>
+                  <span className="rowContent__data">
+                    Opened on: &nbsp;
+                    {new Date(issue.created_at).toLocaleDateString(undefined, {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </span>
                 </span>
-              </span>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </Fragment>
-  );
+              </div>
+            </td>
+          </tr>
+        ))}
+      </Fragment>
+    );
+  }, [issues]);
+
+  return dropDownComponent;
 };
 
 export default TableRow;
