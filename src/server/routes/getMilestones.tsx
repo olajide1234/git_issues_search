@@ -22,7 +22,7 @@ async function getMilestones({
       });
       return response.json();
   } catch (error) {
-    console.warn("Error getting milestones from API");
+    // Log error to monitoring tool
   }
 }
 

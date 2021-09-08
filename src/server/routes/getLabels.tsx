@@ -22,7 +22,7 @@ async function getLabels({
       });
       return response.json();
   } catch (error) {
-    console.warn("Error getting labels from API");
+    // Log error to monitoring tool
   }
 }
 

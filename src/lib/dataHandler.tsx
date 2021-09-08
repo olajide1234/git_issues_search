@@ -26,7 +26,7 @@ export const filterDataHandler = async function (command: {
     const data = await command.execute(command.value);
     return data;
   } catch (error) {
-    console.warn("Unable to fulfil filter request");
+    // Log error to monitoring tool
   }
 };
 
@@ -38,7 +38,7 @@ export const issueDataHandler = async function (command: {
     const data = await command.execute(command.value);
     return data;
   } catch (error) {
-    console.warn("Unable to fulfil issue request");
+    // Log error to monitoring tool
   }
 };
 

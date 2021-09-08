@@ -21,7 +21,7 @@ async function getAssignees({
     });
     return response.json();
   } catch (error) {
-    console.warn("Error getting assignees from API");
+    // Log error to monitoring tool
   }
 }
 

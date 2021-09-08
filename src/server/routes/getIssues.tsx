@@ -19,7 +19,7 @@ async function getIssues(
     });
     return response.json();
   } catch (error) {
-    console.warn("Error getting issues from API");
+    // Log error to monitoring tool
   }
 }
 

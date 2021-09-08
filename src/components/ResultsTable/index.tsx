@@ -105,7 +105,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
         );
         labelsData && setLabels(labelsData);
       } catch (error) {
-        console.warn("Unable to fetch filters");
+        // Log error to monitoring tool
       }
     }
     fetchFilters();
