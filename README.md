@@ -1,9 +1,7 @@
 
 #### TO-DO:
-1 - Use mock service worker in testing so we can test data fetching including server
-2 - Enable multiple selections of filter. Currently, filter selection overrides previous selection of same filter
-3 - Need some visual cue as to which filter categories are currently active
-4 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
+1 - Need some visual cue as to which filter categories are currently active
+2 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
 
 
 ##### The Challenge
