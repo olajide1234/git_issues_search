@@ -51,7 +51,7 @@ const DropdownHeader: FC<DropdownHeaderProps> = ({
               return (
                 <SelectMenu.Item
                   key={i}
-                  selected={activeFilter[item.name] === item.id}
+                  selected={(activeFilter[item.name] !== '') && activeFilter[item.name] === item.id}
                   onClick={onClick}
                 >
                   {item.primaryText} {item?.secondaryText}
