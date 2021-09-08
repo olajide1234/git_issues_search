@@ -33,7 +33,6 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "!src/server/routes/*.tsx",
       "!src/App.{tsx,scss}",
       "!src/index.tsx",
       "!src/react-app-env.d.ts",
@@ -53,5 +52,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "msw": "^0.35.0"
   }
 }

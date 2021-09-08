@@ -6,35 +6,9 @@ import {
   getMilestonesCommand,
   getIssuesCommand,
 } from "./dataHandler";
-
-import {
-  mockMilestone,
-  mockAssignee,
-  mockLabels,
-  mockIssues,
-} from "./mockData";
-
-import getMilestone from "../server/routes/getMilestones";
-import getIssues from "../server/routes/getIssues";
-import getAssignees from "../server/routes/getAssignees";
-import getLabels from "../server/routes/getLabels";
-
-jest.mock("../server/routes/getMilestones");
-jest.mock("../server/routes/getIssues");
-jest.mock("../server/routes/getAssignees");
-jest.mock("../server/routes/getLabels");
-
-const mockedGetMilestone = getMilestone as jest.Mock<any>;
-const mockedGetIssues = getIssues as jest.Mock<any>;
-const mockedGetAssignees = getAssignees as jest.Mock<any>;
-const mockedGetLabels = getLabels as jest.Mock<any>;
-
-afterEach(() => {
-  jest.clearAllMocks();
-});
+import { server, rest } from "../__test__/server";
 
 test("gets assignees filter", async () => {
-  mockedGetAssignees.mockImplementation(() => Promise.resolve(mockAssignee));
   expect(
     await filterDataHandler(
       getAssigneesCommand({ owner: "testowner", repo: "testrepo" })
@@ -43,7 +17,6 @@ test("gets assignees filter", async () => {
 });
 
 test("gets milestone filter", async () => {
-  mockedGetMilestone.mockImplementation(() => Promise.resolve(mockMilestone));
   expect(
     await filterDataHandler(
       getMilestonesCommand({ owner: "testowner", repo: "testrepo" })
@@ -52,7 +25,6 @@ test("gets milestone filter", async () => {
 });
 
 test("gets labels filter", async () => {
-  mockedGetLabels.mockImplementation(() => Promise.resolve(mockLabels));
   expect(
     await filterDataHandler(
       getLabelsCommand({ owner: "testowner", repo: "testrepo" })
@@ -64,12 +36,11 @@ test("gets labels filter", async () => {
 });
 
 test("gets issues", async () => {
-  mockedGetIssues.mockImplementation(() => Promise.resolve(mockIssues));
   expect(
     await issueDataHandler(
       getIssuesCommand({
-        owner: "",
-        repo: "",
+        owner: "testowner",
+        repo: "testrepo",
         milestone: "",
         state: "open",
         assignee: "",
@@ -211,7 +182,7 @@ test("gets issues", async () => {
       },
       repository_url: "https://api.github.com/repos/octocat/Hello-World",
       state: "open",
-      title: "Found a bug",
+      title: "Found a lovely bug",
       updated_at: "2011-04-22T13:33:48Z",
       url: "https://api.github.com/repos/octocat/Hello-World/issues/1347",
       user: {
@@ -243,7 +214,14 @@ test("gets issues", async () => {
 
 test("handle get assignees filter error", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-  mockedGetAssignees.mockImplementation(() => Promise.reject("Error"));
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/assignees",
+      async (req, res, ctx) => {
+        return res(ctx.json("Error"), ctx.status(500));
+      }
+    )
+  );
 
   await filterDataHandler(
     getAssigneesCommand({ owner: "testowner", repo: "testrepo" })
@@ -253,7 +231,14 @@ test("handle get assignees filter error", async () => {
 
 test("handle get milestone filter error", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-  mockedGetMilestone.mockImplementation(() => Promise.reject("Error"));
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/milestones",
+      async (req, res, ctx) => {
+        return res(ctx.json("Error"), ctx.status(500));
+      }
+    )
+  );
 
   await filterDataHandler(
     getMilestonesCommand({ owner: "testowner", repo: "testrepo" })
@@ -263,7 +248,14 @@ test("handle get milestone filter error", async () => {
 
 test("handle get labels filter error", async () => {
   const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-  mockedGetLabels.mockImplementation(() => Promise.reject("Error"));
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/labels",
+      async (req, res, ctx) => {
+        return res(ctx.json("Error"), ctx.status(500));
+      }
+    )
+  );
 
   await filterDataHandler(
     getLabelsCommand({ owner: "testowner", repo: "testrepo" })

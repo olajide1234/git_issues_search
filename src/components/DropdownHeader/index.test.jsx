@@ -2,10 +2,26 @@ import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import DropdownHeader from "./index";
 
+const activeFilter = {
+  owner: "testowner",
+  repo: "testrepo",
+  milestone: "",
+  state: "open",
+  assignee: "",
+  creator: "",
+  mentioned: "",
+  labels: "",
+  sort: "",
+  direction: "",
+  per_page: 10,
+  page: 1,
+};
+
 // We can setup global instance of react component for each test, instead of duplicating setup
 test("renders the dropdown", () => {
   render(
     <DropdownHeader
+      activeFilter={activeFilter}
       clickHandler={(f) => f}
       content={[
         { id: "open", primaryText: "Open", name: "state" },
@@ -35,6 +51,7 @@ test("handles item click", () => {
 
   render(
     <DropdownHeader
+      activeFilter={activeFilter}
       clickHandler={onItemSubmitMock}
       content={[
         { id: "open", primaryText: "Open", name: "state" },

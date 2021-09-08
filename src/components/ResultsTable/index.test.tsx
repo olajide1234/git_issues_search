@@ -1,14 +1,7 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import ResultsTable from "./index";
-import { filterDataHandler } from "../../lib/dataHandler";
-
-jest.mock("../../lib/dataHandler");
-const mockedFilterDataHandler = filterDataHandler as jest.Mock<any>;
-
-afterEach(() => {
-  jest.clearAllMocks();
-});
+import { server, rest } from "../../__test__/server";
 
 const issues = [
   {
@@ -165,16 +158,28 @@ const issues = [
     author_association: "COLLABORATOR",
   },
 ];
+
+const activeFilter = {
+  owner: "testowner",
+  repo: "testrepo",
+  milestone: "",
+  state: "open",
+  assignee: "",
+  creator: "",
+  mentioned: "",
+  labels: "",
+  sort: "",
+  direction: "",
+  per_page: 10,
+  page: 1,
+};
 test("renders the table", () => {
   render(
     <ResultsTable
       currentPage={2}
       issues={issues}
       loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={false}
       onSubmit={(f) => f}
     />
@@ -225,7 +230,7 @@ test("renders the table", () => {
 
   expect(
     screen.getByRole("row", {
-      name: "Found a lovely bug bug #1347 | Status: open | Opened by: octocat | Opened on: Friday, 22 April 2011",
+      name: "Found a lovely bug bug #1347 Status: open Opened by: octocat Opened on: Friday, 22 April 2011",
     })
   ).toBeInTheDocument();
 
@@ -262,10 +267,7 @@ test("navigates table to next page", () => {
       currentPage={2}
       issues={issues}
       loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={false}
       onSubmit={onSubmitMockHandler}
     />
@@ -286,10 +288,7 @@ test("render error message", () => {
       currentPage={2}
       issues={issues}
       loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={true}
       onSubmit={(f) => f}
     />
@@ -306,10 +305,7 @@ test("render empty issues message", () => {
       currentPage={2}
       issues={[]}
       loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={false}
       onSubmit={(f) => f}
     />
@@ -326,10 +322,7 @@ test("render loading state", () => {
       currentPage={2}
       issues={[]}
       loading={true}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={false}
       onSubmit={(f) => f}
     />
@@ -338,24 +331,74 @@ test("render loading state", () => {
   expect(screen.getByTestId("spinner")).toBeInTheDocument();
 });
 
-test("handles error while fetching filters", async () => {
-  const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
-
-  mockedFilterDataHandler.mockImplementation(() => Promise.reject("Error"));
+test("UI does not break when milestone filter fails", async () => {
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/milestones",
+      async (req, res, ctx) => {
+        return res(ctx.json({ error: "Error" }), ctx.status(500));
+      }
+    )
+  );
 
   render(
     <ResultsTable
       currentPage={2}
       issues={issues}
       loading={false}
-      repoDetails={{
-        owner: "microsoft",
-        repo: "typescript",
-      }}
+      activeFilter={activeFilter}
       error={false}
       onSubmit={(f) => f}
     />
   );
-  await screen.findByText(/Found a lovely bug/i);
-  expect(consoleSpy).toHaveBeenCalledWith("Unable to fetch filters");
+  const issueText = await screen.findByText(/Found a lovely bug/i);
+  expect(issueText).toBeInTheDocument();
+});
+
+test("UI does not break when labels filter fails", async () => {
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/labels",
+      async (req, res, ctx) => {
+        return res(ctx.json({ error: "Error" }), ctx.status(500));
+      }
+    )
+  );
+
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={issues}
+      loading={false}
+      activeFilter={activeFilter}
+      error={false}
+      onSubmit={(f) => f}
+    />
+  );
+  const issueText = await screen.findByText(/Found a lovely bug/i);
+  expect(issueText).toBeInTheDocument();
+});
+
+test("UI does not break when assignees filter fails", async () => {
+  server.use(
+    rest.get(
+      "https://api.github.com/repos/testowner/testrepo/assignees",
+      async (req, res, ctx) => {
+        return res(ctx.json({ error: "Error" }), ctx.status(500));
+      }
+    )
+  );
+
+  render(
+    <ResultsTable
+      currentPage={2}
+      issues={issues}
+      loading={false}
+      activeFilter={activeFilter}
+      error={false}
+      onSubmit={(f) => f}
+    />
+  );
+  const issueText = await screen.findByText(/Found a lovely bug/i);
+  expect(issueText).toBeInTheDocument();
 });

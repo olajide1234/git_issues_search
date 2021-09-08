@@ -7,18 +7,22 @@ async function getAssignees({
 }: {
   owner: string;
   repo: string;
-}): Promise<Array<User>> {
-  const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/assignees?per_page=100`;
-  const response = await fetch(fetchUrl, {
-    method: "GET",
-    mode: "cors",
-    cache: "no-cache",
-    credentials: "same-origin",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  return response.json();
+}): Promise<Array<User> | undefined> {
+  try {
+    const fetchUrl = `${apiUrlBase}/repos/${owner}/${repo}/assignees?per_page=100`;
+    const response = await fetch(fetchUrl, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.json();
+  } catch (error) {
+    console.warn("Error getting assignees from API");
+  }
 }
 
 export default getAssignees;

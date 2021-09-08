@@ -102,7 +102,7 @@ export const mockIssues = [
     html_url: "https://github.com/octocat/Hello-World/issues/1347",
     number: 1347,
     state: "open",
-    title: "Found a bug",
+    title: "Found a lovely bug",
     body: "I'm having a problem with this.",
     user: {
       login: "octocat",

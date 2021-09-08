@@ -157,11 +157,11 @@ const issues = [
     author_association: "COLLABORATOR",
   },
 ];
-test("renders the header", () => {
+test("renders the table row", () => {
   render(<TableRow issues={issues} />);
   const issueTitle = screen.getByRole("link", { name: "Found a bug" });
   const issueBody = screen.getByRole("row", {
-    name: "Found a bug bug #1347 | Status: open | Opened by: octocat | Opened on: Friday, 22 April 2011",
+    name: "Found a bug bug #1347 Status: open Opened by: octocat Opened on: Friday, 22 April 2011",
   });
   expect(issueTitle).toBeInTheDocument();
   expect(issueBody).toBeInTheDocument();
