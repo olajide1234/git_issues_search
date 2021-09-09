@@ -112,8 +112,22 @@ export type FilterArgType = string | number;
 
 export type FilterArgument = Pick<GlobalFilters, "owner" | "repo">;
 
+export interface ParsedUsers {
+  parsedAssignees: DropdownfilterGroup;
+  parsedCreators: DropdownfilterGroup;
+  parsedMentioned: DropdownfilterGroup;
+}
+
 export type GetFilterCommand = {
   execute: (value: FilterArgument) => Promise<DropdownfilterGroup | undefined>;
+  value: {
+    owner: string;
+    repo: string;
+  };
+};
+
+export type GetAssigneeFilterCommand = {
+  execute: (value: FilterArgument) => Promise<ParsedUsers | undefined>;
   value: {
     owner: string;
     repo: string;

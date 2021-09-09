@@ -2,7 +2,11 @@ import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { Box, Pagination, Spinner } from "@primer/components";
 
 import type { FC } from "react";
-import type { DropdownfilterGroup, Issue, GlobalFilters } from "../../types";
+import type {
+  DropdownfilterGroup,
+  Issue,
+  GlobalFilters,
+} from "../../types";
 
 import DropdownHeader from "../DropdownHeader";
 import TableRow from "../TableRow";
@@ -33,6 +37,8 @@ const ResultsTable: FC<ResultsTableProp> = ({
 }) => {
   const [milestones, setMilestones] = useState<DropdownfilterGroup>([]);
   const [assignees, setAssignees] = useState<DropdownfilterGroup>([]);
+  const [creator, setCreator] = useState<DropdownfilterGroup>([]);
+  const [mentioned, setMentioned] = useState<DropdownfilterGroup>([]);
   const [labels, setLabels] = useState<DropdownfilterGroup>([]);
 
   const stateOptions: DropdownfilterGroup = [
@@ -89,13 +95,15 @@ const ResultsTable: FC<ResultsTableProp> = ({
         );
         milestonesData && setMilestones(milestonesData);
 
-        const assigneesData = await filterDataHandler(
+        const usersData = await filterDataHandler(
           getAssigneesCommand({
             owner: activeFilter.owner,
             repo: activeFilter.repo,
           })
         );
-        assigneesData && setAssignees(assigneesData);
+        usersData && setAssignees(usersData.parsedAssignees);
+        usersData && setCreator(usersData.parsedCreators);
+        usersData && setMentioned(usersData.parsedMentioned);
 
         const labelsData = await filterDataHandler(
           getLabelsCommand({
@@ -127,7 +135,11 @@ const ResultsTable: FC<ResultsTableProp> = ({
               <td>
                 <div className="table__header">
                   <div className="table__header">
-                    <span className="table__item table__item--hideable">
+                    <span
+                      className={`table__item table__item--hideable ${
+                        activeFilter["milestone"] ? "table__item--active" : null
+                      }`}
+                    >
                       {milestones && (
                         <DropdownHeader
                           activeFilter={activeFilter}
@@ -137,7 +149,11 @@ const ResultsTable: FC<ResultsTableProp> = ({
                         />
                       )}
                     </span>
-                    <span className="table__item">
+                    <span
+                      className={`table__item ${
+                        activeFilter["state"] ? "table__item--active" : null
+                      }`}
+                    >
                       <DropdownHeader
                         activeFilter={activeFilter}
                         clickHandler={memoizedHandleItemClick}
@@ -145,7 +161,11 @@ const ResultsTable: FC<ResultsTableProp> = ({
                         name="State"
                       />
                     </span>
-                    <span className="table__item">
+                    <span
+                      className={`table__item ${
+                        activeFilter["assignee"] ? "table__item--active" : null
+                      }`}
+                    >
                       {assignees && (
                         <DropdownHeader
                           activeFilter={activeFilter}
@@ -155,27 +175,39 @@ const ResultsTable: FC<ResultsTableProp> = ({
                         />
                       )}
                     </span>
-                    <span className="table__item table__item--hideable">
+                    <span
+                      className={`table__item table__item--hideable ${
+                        activeFilter["creator"] ? "table__item--active" : null
+                      }`}
+                    >
                       {assignees && (
                         <DropdownHeader
                           activeFilter={activeFilter}
                           clickHandler={memoizedHandleItemClick}
-                          content={assignees}
+                          content={creator}
                           name="Creator"
                         />
                       )}
                     </span>
-                    <span className="table__item table__item--hideable">
+                    <span
+                      className={`table__item table__item--hideable ${
+                        activeFilter["mentioned"] ? "table__item--active" : null
+                      }`}
+                    >
                       {assignees && (
                         <DropdownHeader
                           activeFilter={activeFilter}
                           clickHandler={memoizedHandleItemClick}
-                          content={assignees}
+                          content={mentioned}
                           name="Mentioned"
                         />
                       )}
                     </span>
-                    <span className="table__item">
+                    <span
+                      className={`table__item ${
+                        activeFilter["labels"] ? "table__item--active" : null
+                      }`}
+                    >
                       {labels && (
                         <DropdownHeader
                           activeFilter={activeFilter}
@@ -186,8 +218,12 @@ const ResultsTable: FC<ResultsTableProp> = ({
                       )}
                     </span>
                   </div>
-                  <div>
-                    <span className="table__item">
+                  <div className="table__sortItem">
+                    <span
+                      className={`table__item ${
+                        activeFilter["sort"] ? "table__item--active" : null
+                      }`}
+                    >
                       <DropdownHeader
                         activeFilter={activeFilter}
                         clickHandler={memoizedHandleItemClick}

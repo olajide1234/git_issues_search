@@ -9,14 +9,25 @@ import type {
   GlobalFilters,
   GetFilterCommand,
   GetIssuesCommand,
+  GetAssigneeFilterCommand,
   Issue,
+  ParsedUsers
 } from "../types";
 
+
 // Command design pattern
-export const filterDataHandler = async function (command: {
-  execute: (value: FilterArgument) => Promise<DropdownfilterGroup | undefined>;
-  value: FilterArgument;
-}): Promise<DropdownfilterGroup | undefined> {
+
+
+async function filterDataHandler(
+  command: GetFilterCommand
+): Promise<DropdownfilterGroup | undefined>;
+
+async function filterDataHandler(
+  command: GetAssigneeFilterCommand
+): Promise<ParsedUsers | undefined>;
+async function filterDataHandler(
+  command: GetFilterCommand | GetAssigneeFilterCommand
+): Promise<ParsedUsers | DropdownfilterGroup | undefined> {
   try {
     const data = await command.execute(command.value);
     return data;
@@ -24,6 +35,8 @@ export const filterDataHandler = async function (command: {
     // Log error to monitoring tool
   }
 };
+
+export { filterDataHandler };
 
 export const issueDataHandler = async function (command: {
   execute: (value: GlobalFilters) => Promise<Issue[] | undefined>;
@@ -39,14 +52,14 @@ export const issueDataHandler = async function (command: {
 
 export const getAssigneesCommand = function (
   value: FilterArgument
-): GetFilterCommand {
+): GetAssigneeFilterCommand {
   const { owner, repo } = value;
   return { execute: getParsedAssignees, value: { owner, repo } };
 };
 
 async function getParsedAssignees(
   value: FilterArgument
-): Promise<DropdownfilterGroup | undefined> {
+): Promise<ParsedUsers | undefined> {
   try {
     const assignees = await getAssignees(value);
     if (assignees) {
@@ -57,7 +70,19 @@ async function getParsedAssignees(
           name: "assignee",
         })
       );
-      return parsedAssignees;
+      const parsedCreators: DropdownfilterGroup = assignees.map((assignee) => ({
+        id: assignee.login,
+        primaryText: assignee.login,
+        name: "creator",
+      }));
+      const parsedMentioned: DropdownfilterGroup = assignees.map(
+        (assignee) => ({
+          id: assignee.login,
+          primaryText: assignee.login,
+          name: "mentioned",
+        })
+      );
+      return { parsedAssignees, parsedCreators, parsedMentioned };
     }
   } catch (error) {
     console.warn("Error getting assignees filter");

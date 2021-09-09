@@ -8,12 +8,22 @@ import {
 } from "./dataHandler";
 import { server, rest } from "../__test__/server";
 
-test("gets assignees filter", async () => {
+test("gets users filter", async () => {
   expect(
     await filterDataHandler(
       getAssigneesCommand({ owner: "testowner", repo: "testrepo" })
     )
-  ).toEqual([{ id: "octocat", name: "assignee", primaryText: "octocat" }]);
+  ).toEqual({
+    parsedAssignees: [
+      { id: "octocat", name: "assignee", primaryText: "octocat" },
+    ],
+    parsedCreators: [
+      { id: "octocat", name: "creator", primaryText: "octocat" },
+    ],
+    parsedMentioned: [
+      { id: "octocat", name: "mentioned", primaryText: "octocat" },
+    ],
+  });
 });
 
 test("gets milestone filter", async () => {
