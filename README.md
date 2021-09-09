@@ -1,6 +1,7 @@
 
 #### TO-DO:
-1 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
+1 - Fix dropdown support issues for IE 10 and IE 11.
+2 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
 
 
 ##### The Challenge
