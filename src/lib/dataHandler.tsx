@@ -3,21 +3,16 @@ import getIssues from "../server/routes/getIssues";
 import getAssignees from "../server/routes/getAssignees";
 import getLabels from "../server/routes/getLabels";
 
-import type { DropdownfilterGroup, Issue, GlobalFilters } from "../types";
+import type {
+  DropdownfilterGroup,
+  FilterArgument,
+  GlobalFilters,
+  GetFilterCommand,
+  GetIssuesCommand,
+  Issue,
+} from "../types";
 
-type FilterArgument = Pick<GlobalFilters, "owner" | "repo">;
-type GetFilterCommand = {
-  execute: (value: FilterArgument) => Promise<DropdownfilterGroup | undefined>;
-  value: {
-    owner: string;
-    repo: string;
-  };
-};
-type GetIssuesCommand = {
-  execute: (value: GlobalFilters) => Promise<Issue[] | undefined>;
-  value: GlobalFilters;
-};
-
+// Command design pattern
 export const filterDataHandler = async function (command: {
   execute: (value: FilterArgument) => Promise<DropdownfilterGroup | undefined>;
   value: FilterArgument;
@@ -63,7 +58,7 @@ async function getParsedAssignees(
         })
       );
       return parsedAssignees;
-    } 
+    }
   } catch (error) {
     console.warn("Error getting assignees filter");
   }
@@ -90,7 +85,7 @@ async function getParsedMilestones(
         })
       );
       return parsedMilestones;
-    } 
+    }
   } catch (error) {
     console.warn("Error getting milestone filters");
   }
@@ -115,7 +110,7 @@ async function getParsedLabels(
         name: "labels",
       }));
       return parsedLabels;
-    } 
+    }
   } catch (error) {
     console.warn("Error getting label filters");
   }

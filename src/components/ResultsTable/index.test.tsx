@@ -177,7 +177,7 @@ test("renders the table", () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={false}
@@ -265,7 +265,7 @@ test("navigates table to next page", () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={false}
@@ -286,7 +286,7 @@ test("render error message", () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={true}
@@ -303,7 +303,7 @@ test("render empty issues message", () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={[]}
+      data={[]}
       loading={false}
       activeFilter={activeFilter}
       error={false}
@@ -320,7 +320,7 @@ test("render loading state", () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={[]}
+      data={[]}
       loading={true}
       activeFilter={activeFilter}
       error={false}
@@ -344,7 +344,7 @@ test("UI does not break when milestone filter fails", async () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={false}
@@ -368,7 +368,7 @@ test("UI does not break when labels filter fails", async () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={false}
@@ -392,7 +392,7 @@ test("UI does not break when assignees filter fails", async () => {
   render(
     <ResultsTable
       currentPage={2}
-      issues={issues}
+      data={issues}
       loading={false}
       activeFilter={activeFilter}
       error={false}

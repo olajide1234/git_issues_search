@@ -9,14 +9,14 @@ import IssueLabel from "../IssueLabel";
 import "./index.scss";
 
 interface TableRowProps {
-  issues: Array<Issue>;
+  data: Array<Issue>;
 }
 
-const TableRow: FC<TableRowProps> = ({ issues }) => {
+const TableRow: FC<TableRowProps> = ({ data }) => {
   const dropDownComponent = useMemo(() => {
     return (
       <Fragment>
-        {issues.map((issue) => (
+        {data.map((issue) => (
           <tr key={issue.id}>
             <td>
               <div className="rowContent">
@@ -48,7 +48,7 @@ const TableRow: FC<TableRowProps> = ({ issues }) => {
         ))}
       </Fragment>
     );
-  }, [issues]);
+  }, [data]);
 
   return dropDownComponent;
 };

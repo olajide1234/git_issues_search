@@ -158,7 +158,7 @@ const issues = [
   },
 ];
 test("renders the table row", () => {
-  render(<TableRow issues={issues} />);
+  render(<TableRow data={issues} />);
   const issueTitle = screen.getByRole("link", { name: "Found a bug" });
   const issueBody = screen.getByRole("row", {
     name: "Found a bug bug #1347 Status: open Opened by: octocat Opened on: Friday, 22 April 2011",

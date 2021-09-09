@@ -109,3 +109,18 @@ export interface DropdownfilterType {
 }
 
 export type FilterArgType = string | number;
+
+export type FilterArgument = Pick<GlobalFilters, "owner" | "repo">;
+
+export type GetFilterCommand = {
+  execute: (value: FilterArgument) => Promise<DropdownfilterGroup | undefined>;
+  value: {
+    owner: string;
+    repo: string;
+  };
+};
+
+export type GetIssuesCommand = {
+  execute: (value: GlobalFilters) => Promise<Issue[] | undefined>;
+  value: GlobalFilters;
+};

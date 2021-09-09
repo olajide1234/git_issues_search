@@ -19,7 +19,7 @@ interface ResultsTableProp {
   activeFilter: GlobalFilters;
   currentPage: number;
   error: boolean;
-  issues: Array<Issue>;
+  data: Array<Issue>;
   loading: boolean;
   onSubmit: (inputs: Partial<GlobalFilters>) => void;
 }
@@ -27,7 +27,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
   activeFilter,
   currentPage,
   error,
-  issues,
+  data,
   loading,
   onSubmit,
 }) => {
@@ -75,7 +75,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
     e.preventDefault();
     memoizedHandleItemClick({ page: number });
   };
-  const isResultEmptyOrErrorOrLoading = loading || issues.length < 1 || error;
+  const isResultEmptyOrErrorOrLoading = loading || data.length < 1 || error;
 
   useEffect(() => {
     async function fetchFilters(): Promise<void> {
@@ -224,7 +224,7 @@ const ResultsTable: FC<ResultsTableProp> = ({
                 </tr>
               )
             ) : (
-              <TableRow issues={issues} />
+              <TableRow data={data} />
             )}
           </tbody>
         </table>

@@ -1,10 +1,16 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import Issues from "./index";
+import Home from "./index";
+import { getIssuesCommand } from "../../lib/dataHandler";
 import { server, rest } from "../../__test__/server";
 
 test("renders the header", () => {
-  render(<Issues />);
+  render(
+    <Home
+      pageTitle={"Sample"}
+      dataCommand={getIssuesCommand}
+    />
+  );
   const headerText = screen.getByText(/IssueHub/i);
   const headerSubText = screen.getByText(/by Fus/i);
   expect(headerText).toBeInTheDocument();
@@ -12,15 +18,25 @@ test("renders the header", () => {
 });
 
 test("renders the welcome text", () => {
-  render(<Issues />);
+  render(
+    <Home
+      pageTitle={"Sample header"}
+      dataCommand={getIssuesCommand}
+    />
+  );
   const welcomeText = screen.getByText(
-    "👋 Search, filter and view Github issues from any repository"
+    "Sample header"
   );
   expect(welcomeText).toBeInTheDocument();
 });
 
 test("fetches data for table", async () => {
-  render(<Issues />);
+  render(
+    <Home
+      pageTitle={"👋 Search, filter and view Github issues from any repository"}
+      dataCommand={getIssuesCommand}
+    />
+  );
 
   const repoOwnerForm = screen.getByRole("textbox", {
     name: "Repository owner",
@@ -48,7 +64,12 @@ test("handles data fetch error", async () => {
     )
   );
 
-  render(<Issues />);
+  render(
+    <Home
+      pageTitle={"👋 Search, filter and view Github issues from any repository"}
+      dataCommand={getIssuesCommand}
+    />
+  );
   const repoOwnerForm = screen.getByRole("textbox", {
     name: "Repository owner",
   });

@@ -8,16 +8,22 @@ import React, {
 import { Box, Pagehead } from "@primer/components";
 
 import type { FC } from "react";
-import type { GlobalFilters, Issue } from "../../types";
+import type { GlobalFilters, Issue, GetIssuesCommand } from "../../types";
 
-import { issueDataHandler, getIssuesCommand } from "../../lib/dataHandler";
+import { issueDataHandler } from "../../lib/dataHandler";
 import PageHeader from "../../components/PageHeader";
 import RepoSearchForm from "../../components/RepoSearchForm";
 import ResultsTable from "../../components/ResultsTable";
 
 import "./index.scss";
 
-const Issues: FC = () => {
+interface HomeProps {
+  pageTitle: string;
+  dataCommand: (value: GlobalFilters) => GetIssuesCommand;
+}
+
+const Home: FC<HomeProps> = ({ dataCommand, pageTitle }) => {
+  // We can also lift the filter state and its change function up if there are going to be different types of filters, but for now both envisaged uses support same filter, no need to optimize prematurely
   const [globalFilters, setGlobalFilters] = useState<GlobalFilters>({
     owner: "",
     repo: "",
@@ -32,7 +38,8 @@ const Issues: FC = () => {
     per_page: 10,
     page: 1,
   });
-  const [issues, setIssues] = useState<Array<Issue>>([]);
+
+  const [data, setData] = useState<Array<Issue>>([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const didMount = useRef(false);
@@ -46,14 +53,12 @@ const Issues: FC = () => {
   );
 
   useEffect(() => {
-    async function fetchIssues(): Promise<void> {
+    async function fetchData(): Promise<void> {
       setLoading(true);
       try {
-        const response = await issueDataHandler(
-          getIssuesCommand(globalFilters)
-        );
+        const response = await issueDataHandler(dataCommand(globalFilters));
         if (Array.isArray(response)) {
-          setIssues(response);
+          setData(response);
           setLoading(false);
           error && setError(false);
         } else {
@@ -66,9 +71,9 @@ const Issues: FC = () => {
       }
     }
 
-    if (didMount.current) fetchIssues();
+    if (didMount.current) fetchData();
     else didMount.current = true;
-  }, [error, globalFilters]);
+  }, [dataCommand, error, globalFilters]);
 
   const isRepoInfoSet =
     Boolean(globalFilters.owner) && Boolean(globalFilters.repo);
@@ -85,7 +90,7 @@ const Issues: FC = () => {
           borderStyle="solid"
         >
           <Pagehead className="contentBox__text">
-            👋 Search, filter and view Github issues from any repository
+            {pageTitle}
           </Pagehead>
           <RepoSearchForm onSubmit={memoizedHandleSearchSubmit} />
         </Box>
@@ -94,7 +99,7 @@ const Issues: FC = () => {
             activeFilter={globalFilters}
             currentPage={globalFilters.page}
             error={error}
-            issues={issues}
+            data={data}
             loading={loading}
             onSubmit={memoizedHandleSearchSubmit}
           />
@@ -104,4 +109,4 @@ const Issues: FC = () => {
   );
 };
 
-export default Issues;
+export default Home;
