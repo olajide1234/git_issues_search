@@ -1,5 +1,4 @@
-$border-color: #ddd;
-$active-menu: #2ea44f;
+@import "../../variables";
 
 .table {
   width: 100%;
@@ -18,7 +17,7 @@ $active-menu: #2ea44f;
       display: none;
     }
     &--active {
-      border: 1px solid $active-menu
+      border: 1px solid $active-menu;
     }
   }
 
