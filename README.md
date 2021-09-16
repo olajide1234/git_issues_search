@@ -1,8 +1,15 @@
 ### Live deploy: https://xenodochial-ptolemy-05f12a.netlify.app/
 
+#### Things to watch-out for:
+- A truly reusable Home component using the Command design pattern. You can easily switch to using the Home component to view pull requests
+- 100% test coverage using a truly user-centric testing method and Mock Service Worker to accurately mimic server response
+- 100% typings with typescript including use of advanced concepts e.g. Overload signature (src/lib/dataHandler.tsx - filterDataHandler)
+- BEM methodology for styling
+- SASS styling
+
 #### TO-DO:
-1 - Fix dropdown support issues for IE 10 and IE 11.
-2 - Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
+- Fix dropdown support issues for IE 10 and IE 11.
+- Github API does not return count of pages available, therefore, next pagination button is always active, even at the end of available results
 
 
 ##### The Challenge
